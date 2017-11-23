@@ -41,7 +41,7 @@
 					v-for="(item, index) in items"
 					v-bind:item="item"
 					v-bind:key="item.id"
-					v-on:item-removed="removeItem" v-on:item-edited="editItem">
+					v-on:item-removed="removeItem">
 				</li>
 			</ul>
 			<p v-else>No items to display</p>

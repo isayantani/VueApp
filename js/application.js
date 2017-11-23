@@ -25,7 +25,6 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 		data: function(){
 			return {
 				newItemText: '',
-				counter: 0,
 				styleObject : {
 					'margin-bottom': '10px'
 				}
@@ -33,7 +32,7 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 		},
 		methods: {
   			addNewItem: function(){
-  				this.$emit('item-added', this.newItemText, this.counter++);
+  				this.$emit('item-added', this.newItemText);
   				this.newItemText = '';
   			}
   		}
@@ -62,14 +61,16 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 			addNewItem: function(){
 				this.openForm = true;
 			},
-			addItem: function(newItem, counter){
+			addItem: function(newItem){
   				this.items.push({
-  					id     : counter,
-  					text   : newItem
+  					id   : this.items.length,
+  					text : newItem
   				});
   			},
   			removeItem: function(itemRemoved){
-  				this.items.pop(itemRemoved)
+  				this.items = this.items.filter(function(item){
+  					return item.text !== itemRemoved.text
+  				})
   			}
   		}
   	})
