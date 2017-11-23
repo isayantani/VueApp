@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet"  href="css/bootstrap-3.3.7/bootstrap.css" >
+	<link rel="stylesheet"  href="css/style.css">
+
+	<template id="app-nav">
+	   <div id="app-nav" v-bind:style="styleObject">
+
+			<span v-if="header.loginType" v-html="'Welcome ' + header.userProfile.name" key="username-input"></span>
+	    	<span v-else v-html="'Welcome ' + header.userProfile.email" key="email-input"></span>
+			<span v-html="header.datetime" class="pull-right"></span>
+
+		</div>
+	</template>
+
+	<template id="sidebar-form">
+		<input
+			v-model="newItemText"
+			v-on:keyup.enter="addNewItem"
+			placeholder="Add an item"
+			v-bind:style="styleObject"/>
+	</template>
+
+	<template id="list-item">
+		<li>
+			<span  v-html="item.text"></span>
+			<button v-on:click="remove">x</button>
+		</li>
+	</template>
+
+	<template id="app-sidebar">
+		<div class="col-md-6 sidebar">
+			<h4>SideBar</h4>
+			<sidebar-form v-if="openForm" v-on:item-added="addItem"></sidebar-form>
+			<button v-else v-on:click="addNewItem">Add New Item</button>
+
+			<ul v-if="items.length">
+				<li
+					is="list-item" 
+					v-for="(item, index) in items"
+					v-bind:item="item"
+					v-bind:key="item.id"
+					v-on:item-removed="removeItem" v-on:item-edited="editItem">
+				</li>
+			</ul>
+			<p v-else>No items to display</p>
+	    </div>
+	</template>
+
+	<template id="app-content">
+		<div class="col-md-6 content">
+			<h3> {{ content }} </h3>
+	    </div>
+	</template>
+
+</head>
+
+<body>
+	<div id="app">
+		<app-nav  v-bind:header="headerProfile"></app-nav>
+		<div>
+			<app-sidebar v-bind:items="items"></app-sidebar>
+		    <app-content></app-content>
+		</div>
+	</div>
+
+	<!-- Load the script "js/main.js" as our entry point -->
+
+	<script data-main="js/main.js" src="js/libs/require/require.js"></script>
+</body>
+</html>
+
+
+
+
