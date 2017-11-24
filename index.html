@@ -6,7 +6,6 @@
 
 	<template id="app-nav">
 	   <div id="app-nav" v-bind:style="styleObject">
-
 			<span v-if="header.loginType" v-html="'Welcome ' + header.userProfile.name" key="username-input"></span>
 	    	<span v-else v-html="'Welcome ' + header.userProfile.email" key="email-input"></span>
 			<span v-html="header.datetime" class="pull-right"></span>
@@ -24,7 +23,7 @@
 
 	<template id="list-item">
 		<li>
-			<span  v-html="item.text"></span>
+			<span v-html="item.text" v-bind:class="{bold:isActive}" v-on:click.prevent="clicked($event)"></span>
 			<button v-on:click="remove">x</button>
 		</li>
 	</template>
@@ -41,7 +40,8 @@
 					v-for="(item, index) in items"
 					v-bind:item="item"
 					v-bind:key="item.id"
-					v-on:item-removed="removeItem">
+					v-on:item-removed="removeItem"
+					v-on:disable-bold-items="disableItems">
 				</li>
 			</ul>
 			<p v-else>No items to display</p>

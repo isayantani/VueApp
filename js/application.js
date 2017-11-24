@@ -7,7 +7,6 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 		props: ['header'],
 		data: function(){
 			return {
-				
 				styleObject : {
 					'font-size'    : '16px',
 					'color'        : 'blue',
@@ -41,7 +40,16 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 	Vue.component('list-item', {
 		template: '#list-item',
 		props: ['item'],
+		computed: {
+			isActive: function(){
+				return this.item.isActive
+			}
+		},
 		methods: {
+			clicked: function(event){
+				this.$emit('disable-bold-items');
+				this.item.isActive = true;
+			},
 			remove: function(){
 				this.$emit('item-removed', this.item);
 			}
@@ -63,14 +71,20 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 			},
 			addItem: function(newItem){
   				this.items.push({
-  					id   : this.items.length,
-  					text : newItem
+  					id       : this.items.length,
+  					text     : newItem,
+  					isActive : false
   				});
   			},
   			removeItem: function(itemRemoved){
   				this.items = this.items.filter(function(item){
   					return item.text !== itemRemoved.text
   				})
+  			},
+  			disableItems: function(){
+  				for(var i = 0; i < this.items.length; i++){
+  					this.items[i].isActive = false;
+  				}
   			}
   		}
   	})
