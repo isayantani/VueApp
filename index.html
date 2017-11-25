@@ -34,10 +34,10 @@
 			<sidebar-form v-if="openForm" v-on:item-added="addItem"></sidebar-form>
 			<button v-else v-on:click="addNewItem">Add New Item</button>
 
-			<ul v-if="items.length">
+			<ul v-if="viewProfile.items.length">
 				<li
 					is="list-item" 
-					v-for="(item, index) in items"
+					v-for="(item, index) in viewProfile.items"
 					v-bind:item="item"
 					v-bind:key="item.id"
 					v-on:item-removed="removeItem"
@@ -50,7 +50,34 @@
 
 	<template id="app-content">
 		<div class="col-md-6 content">
-			<h3> {{ content }} </h3>
+			<div v-if="viewProfile.itemClicked == 'Rectangle'" v-bind:id="viewProfile.itemClicked">
+				<svg width="50" height="50">
+  					<rect x="0" y="0" width="50" height="50" fill="green" />
+				</svg>
+			</div>
+			<div v-else-if="viewProfile.itemClicked == 'Circle'" v-bind:id="viewProfile.itemClicked">
+				<svg width="50" height="50">
+  					<circle cx="25" cy="25" r="25" fill="purple" />
+				</svg>
+			</div>
+			<div v-else-if="viewProfile.itemClicked == 'Ellipse'" v-bind:id="viewProfile.itemClicked">
+				<svg width="50" height="50">
+				  <ellipse cx="25" cy="25" rx="15" ry="10" fill="red" />
+				</svg>
+			</div>
+			<div v-else-if="viewProfile.itemClicked == 'Line'" v-bind:id="viewProfile.itemClicked">
+				<svg width="50" height="50">
+				  <line x1="5" y1="5" x2="40" y2="40" stroke="gray" stroke-width="5"  />
+				</svg>
+			</div>
+			<p v-else v-html="empty"></p>
+	    </div>
+	</template>
+
+	<template id="app-view">
+		<div class="app-view">
+			<app-sidebar v-bind:view-profile="viewProfile"></app-sidebar>
+		    <app-content v-bind:view-profile="viewProfile"></app-content>
 	    </div>
 	</template>
 
@@ -59,10 +86,7 @@
 <body>
 	<div id="app">
 		<app-nav  v-bind:header="headerProfile"></app-nav>
-		<div>
-			<app-sidebar v-bind:items="items"></app-sidebar>
-		    <app-content></app-content>
-		</div>
+		<app-view v-bind:view-profile="viewProfile"></app-view>
 	</div>
 
 	<!-- Load the script "js/main.js" as our entry point -->

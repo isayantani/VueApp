@@ -47,8 +47,8 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 		},
 		methods: {
 			clicked: function(event){
-				this.$emit('disable-bold-items');
 				this.item.isActive = true;
+				this.$emit('disable-bold-items', this.item);
 			},
 			remove: function(){
 				this.$emit('item-removed', this.item);
@@ -59,7 +59,7 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 
 	Vue.component('app-sidebar', {
 		template: '#app-sidebar',
-		props: ['items'],
+		props: ['viewProfile'],
 		data: function(){
 			return {
 				"openForm": false
@@ -70,32 +70,42 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 				this.openForm = true;
 			},
 			addItem: function(newItem){
-  				this.items.push({
-  					id       : this.items.length,
+  				this.viewProfile.items.push({
+  					id       : this.viewProfile.items.length,
   					text     : newItem,
   					isActive : false
   				});
   			},
   			removeItem: function(itemRemoved){
-  				this.items = this.items.filter(function(item){
+  				this.viewProfile.items = this.viewProfile.items.filter(function(item){
   					return item.text !== itemRemoved.text
   				})
   			},
-  			disableItems: function(){
-  				for(var i = 0; i < this.items.length; i++){
-  					this.items[i].isActive = false;
+  			disableItems: function(clickedItem){
+  				this.viewProfile.itemClicked = clickedItem.text;
+
+				for(var i = 0; i < this.viewProfile.items.length; i++){
+  					if(this.viewProfile.items[i].id === clickedItem.id)
+  						continue
+					this.viewProfile.items[i].isActive = false;
   				}
   			}
   		}
   	})
 
 	Vue.component('app-content', {
+		props: ['viewProfile'],
 		template: '#app-content',
 		data: function(){
 			return {
-				content: 'Content panel'
+				"empty": "No chart to display"
 			}
 		}
+	})
+
+	Vue.component('app-view', {
+		template: '#app-view',
+		props: ['viewProfile']
 	})
 
 	var vm = new Vue({
@@ -109,7 +119,10 @@ define(['underscore', 'd3', 'vue'], function(_, d3, Vue){
 				loginType   : true,
 				datetime    : new Date().toLocaleDateString(),
 			},
-			items: []
+			viewProfile: {
+				items: [],
+				itemClicked: ''
+			}
 		}
 	});
 
